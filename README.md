@@ -1,8 +1,4 @@
-## Cypress e2e Template
-
-A thoughtful project scaffold for writing Cypress e2e tests against multiple environments. I made it because I enjoy the challenge of building reasonable and conceptually scalable project architectures. In the process, I've learned a lot about Cypress and e2e testing!
-
-Full disclaimer: I am not an e2e tester
+# Bookcars e2e
 
 ## Project Structure
 
@@ -26,8 +22,8 @@ Full disclaimer: I am not an e2e tester
 1. Clone the repo
 
    ```bash
-   npx degit benjammin4dayz/cypress-e2e-template ez-e2e
-   cd ez-e2e
+   git clone https://github.com/benjammin4dayz/bookcars-e2e.git
+   cd bookcars-e2e
    ```
 
 2. Install dependencies
@@ -47,3 +43,9 @@ Full disclaimer: I am not an e2e tester
    ```
 
 3. Write & Run tests
+
+## Cypress Commands
+
+### `login(where: 'frontend'|'backend', username?: string, password?: string)`
+
+- Login helper; pre-loaded command with environment credentials. Can be set manually

@@ -1,3 +1,4 @@
+import { backendLogin, frontendLogin } from './../bookcars/scripts';
 // ***********************************************
 // This example commands.js shows you how to
 // create various custom commands and overwrite
@@ -23,3 +24,16 @@
 //
 // -- This will overwrite an existing command --
 // Cypress.Commands.overwrite('visit', (originalFn, url, options) => { ... })
+
+Cypress.Commands.add('login', (where, username, password) => {
+  switch (where.toLowerCase()) {
+    case 'frontend':
+      return frontendLogin(username, password);
+    case 'backend':
+      return backendLogin(username, password);
+    default:
+      throw new Error(
+        `Invalid login location: '${where}'. Expected 'frontend' or 'backend'.`
+      );
+  }
+});
