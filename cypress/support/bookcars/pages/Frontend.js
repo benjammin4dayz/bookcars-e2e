@@ -10,5 +10,25 @@ export class Frontend {
     chooseLanguageDropdown: '',
   };
 
-  static HomePage = page.create('/');
+  static HomePage = page.create('/', {
+    logo: '#root > div.app > div.content > div > div > div.home-logo > span.home-logo-main',
+    pickupLocationInput: '',
+    dropOffLocationInput: '',
+    dateFromInput: '',
+    dateFromPicker: '',
+    dateToInput: '',
+    dateToPicker: '',
+    searchButton: '',
+    carList: '',
+  });
+
+  static SignInPage = page.create('/sign-in', {
+    emailInput:
+      '#root > div.app > div > div.signin > div > form > div:nth-child(2) > div > input',
+    passwordInput:
+      '#root > div.app > div > div.signin > div > form > div:nth-child(3) > div > input',
+    staySignedInCheckbox: '',
+    submitButton:
+      '#root > div.app > div > div.signin > div > form > div.signin-buttons > button',
+  });
 }

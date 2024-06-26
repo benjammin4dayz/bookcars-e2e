@@ -8,5 +8,13 @@ export class Backend {
     chooseLanguageDropdown: '',
   };
 
+  static SignInPage = page.create('/sign-in', {
+    emailInput: '#email',
+    passwordInput: '#password',
+    staySignedInCheckbox: '',
+    submitButton:
+      '#root > div.app > div > div.signin > div > form > div.signin-buttons > button',
+  });
+
   static HomePage = page.create('/');
 }
