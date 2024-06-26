@@ -1,23 +1,30 @@
 // resolve keys for the active environment specified in cypress.env.json
-const APP = __env__('app');
-const CREDENTIALS = __env__('credentials');
+const frontend = __env__('frontend');
+const backend = __env__('backend');
 
 // construct and validate the URL before passing it to consumers
-const endpoint = new URL(APP.url);
-endpoint.port = APP.port;
+const frontendUrl = new URL(frontend.url);
+frontendUrl.port = frontend.port;
+
+const backendUrl = new URL(backend.url);
+backendUrl.port = backend.port;
 // ---
 
-/**
- * The base at which the app is served
- * e.g. http://localhost:80 or https://example.com:443
- */
-export const APP_URL = endpoint.href;
+export const env = {
+  /** @type {string} */
+  FRONTEND_URL: frontendUrl.href,
+  /** @type {string} */
+  FRONTEND_EMAIL: frontend.email,
+  /** @type {string} */
+  FRONTEND_PASSWORD: frontend.password,
 
-/** @type {string} */
-export const USERNAME = CREDENTIALS.username;
-
-/** @type {string} */
-export const PASSWORD = CREDENTIALS.password;
+  /** @type {string} */
+  BACKEND_URL: backendUrl.href,
+  /** @type {string} */
+  BACKEND_EMAIL: backend.email,
+  /** @type {string} */
+  BACKEND_PASSWORD: backend.password,
+};
 
 /** @param {string} key */
 export function __env__(key) {
