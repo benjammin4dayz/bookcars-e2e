@@ -1,0 +1,29 @@
+{
+  "name": "Cypress Car",
+  "supplier": "628a51b9572a010c6b5d1a2b",
+  "minimumAge": 21,
+  "locations": [
+    "628a5459572a010c6b5d1b2d",
+    "628a5473572a010c6b5d1b39",
+    "628a5467572a010c6b5d1b33",
+    "628a546d572a010c6b5d1b36",
+    "628a5461572a010c6b5d1b30"
+  ],
+  "price": 100,
+  "deposit": 100,
+  "available": true,
+  "type": "gasoline",
+  "gearbox": "automatic",
+  "aircon": true,
+  "image": null,
+  "seats": 4,
+  "doors": 4,
+  "fuelPolicy": "likeForlike",
+  "mileage": 69420,
+  "cancellation": 100,
+  "amendments": 25,
+  "theftProtection": 69,
+  "collisionDamageWaiver": 420,
+  "fullInsurance": 690,
+  "additionalDriver": 1337
+}
