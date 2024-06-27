@@ -26,7 +26,7 @@
     "chai-friendly",
     "mocha"
   ],
-  "ignorePatterns": ["**/*.ts", "cypress.config.js", "**/node_modules/**"],
+  "ignorePatterns": ["**/*.ts", "cypress.config*", "**/node_modules/**"],
   "rules": {
     "n/no-missing-import": "off",
     "import/no-unresolved": "error",
