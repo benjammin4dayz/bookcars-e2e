@@ -1,5 +1,5 @@
-import {
-  NewCar,
+import { CreateCar } from '../support/bookcars/pages/backend/CreateCar';
+const {
   uploadImage,
   inputName,
   selectSupplier,
@@ -21,16 +21,17 @@ import {
   inputCollisionDamageWaiver,
   inputFullInsurance,
   inputAdditionalDriver,
-} from './create-car.helpers';
+} = CreateCar;
+
 const BASE_URL = 'http://localhost';
 
 describe('Create Car', () => {
-  describe('Form Inputs', () => {
-    beforeEach(() => {
-      cy.login('backend');
-      cy.visit(BASE_URL + ':3001/create-car');
-    });
+  beforeEach(() => {
+    cy.login('backend');
+    CreateCar.visit();
+  });
 
+  describe('Form Inputs', () => {
     it('should upload a car avatar image', () => {
       // prepare to capture the POST request after submitting the image
       cy.intercept({
@@ -152,11 +153,6 @@ describe('Create Car', () => {
   });
 
   describe('Form Submission', () => {
-    beforeEach(() => {
-      cy.login('backend');
-      cy.visit(BASE_URL + ':3001/create-car');
-    });
-
     it('should create a new car', () => {
       uploadImage();
       inputName();
@@ -191,7 +187,7 @@ describe('Create Car', () => {
       }).as('createCar');
 
       // dispatch the POST request
-      cy.get(NewCar.SUBMIT).click();
+      CreateCar.submit();
 
       // wait for a response
       cy.wait('@createCar').then(interception => {
@@ -220,16 +216,6 @@ describe('Create Car', () => {
           expect(requestBody).to.deep.equal(expectedBody);
         });
       });
-    });
-
-    after(() => {
-      cy.wait(5000); // eslint-disable-line cypress/no-unnecessary-waiting
-      const deleteButton =
-        ':nth-child(1) > .action > button.MuiButtonBase-root';
-      const confirmButton = '.MuiButton-containedError';
-
-      cy.get(deleteButton).click({ force: true });
-      cy.get(confirmButton).click({ force: true });
     });
   });
 });
