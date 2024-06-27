@@ -227,5 +227,6 @@ export function selectOption(input, value) {
  * @param {string} value
  */
 function qcType(input, value) {
-  cy.get(input).clear().type(value, { delay: 0 });
+  cy.get(input).clear();
+  cy.get(input).type(value, { delay: 0 });
 }

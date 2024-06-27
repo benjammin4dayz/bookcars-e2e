@@ -15,7 +15,6 @@ export const frontendLogin = (username, password) => {
     usernameSelector: Frontend.SignInPage.elements.emailInput,
     passwordSelector: Frontend.SignInPage.elements.passwordInput,
     submitSelector: Frontend.SignInPage.elements.submitButton,
-    loadTime: env.PAGE_LOAD_TIME,
   });
 
   cy.visit(Frontend.HomePage.url);
@@ -35,7 +34,6 @@ export const backendLogin = (username, password) => {
     usernameSelector: Backend.SignInPage.elements.emailInput,
     passwordSelector: Backend.SignInPage.elements.passwordInput,
     submitSelector: Backend.SignInPage.elements.submitButton,
-    loadTime: env.PAGE_LOAD_TIME,
   });
 
   cy.visit(Backend.SignInPage.url);
