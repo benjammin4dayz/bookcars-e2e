@@ -1,0 +1,35 @@
+{
+  "root": true,
+  "parserOptions": {
+    "ecmaVersion": 2022,
+    "sourceType": "module"
+  },
+  "env": {
+    "browser": true,
+    "node": true,
+    "es6": true
+  },
+  "extends": [
+    "eslint:recommended",
+    "plugin:n/recommended",
+    "plugin:import/recommended",
+    "plugin:cypress/recommended",
+    "plugin:chai-expect/recommended",
+    "plugin:chai-friendly/recommended",
+    "plugin:mocha/recommended"
+  ],
+  "plugins": [
+    "n",
+    "import",
+    "cypress",
+    "chai-expect",
+    "chai-friendly",
+    "mocha"
+  ],
+  "ignorePatterns": ["**/*.ts", "cypress.config.js", "**/node_modules/**"],
+  "rules": {
+    "n/no-missing-import": "off",
+    "import/no-unresolved": "error",
+    "mocha/no-mocha-arrows": "off"
+  }
+}
