@@ -1,4 +1,4 @@
-import { backendLogin, frontendLogin } from './../bookcars/scripts';
+import { backend, frontend } from '../bookcars/pages';
 // ***********************************************
 // This example commands.js shows you how to
 // create various custom commands and overwrite
@@ -28,9 +28,11 @@ import { backendLogin, frontendLogin } from './../bookcars/scripts';
 Cypress.Commands.add('login', (where, username, password) => {
   switch (where.toLowerCase()) {
     case 'frontend':
-      return frontendLogin(username, password);
+      frontend.SignIn.login(username, password);
+      break;
     case 'backend':
-      return backendLogin(username, password);
+      backend.SignIn.login(username, password);
+      break;
     default:
       throw new Error(
         `Invalid login location: '${where}'. Expected 'frontend' or 'backend'.`

@@ -15,7 +15,6 @@ export function qcType(input, value) {
  * @param {string} input
  * @param {string} value
  */
-
 export function selectOption(input, value) {
   // focus input with click
   cy.get(input).click();
