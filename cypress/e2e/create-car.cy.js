@@ -1,4 +1,4 @@
-import { CreateCar } from '../support/bookcars/pages/backend/CreateCar';
+import { backend, Api } from '../support/bookcars';
 const {
   uploadImage,
   inputName,
@@ -21,25 +21,20 @@ const {
   inputCollisionDamageWaiver,
   inputFullInsurance,
   inputAdditionalDriver,
-} = CreateCar;
-
-const BASE_URL = 'http://localhost';
+} = backend.CreateCar;
 
 describe('Create Car', () => {
   beforeEach(() => {
     cy.login('backend');
-    CreateCar.visit();
+    backend.CreateCar.visit();
   });
 
   describe('Form Inputs', () => {
     it('should upload a car avatar image', () => {
       // prepare to capture the POST request after submitting the image
-      cy.intercept({
-        method: 'POST',
-        url: BASE_URL + ':4002/api/create-car-image',
-      }).as('createCarImage');
+      Api.interceptImageUpload().as('createCarImage');
 
-      // upload the image
+      // dispatch the POST request
       uploadImage();
 
       // assert that the request was successful
@@ -180,14 +175,11 @@ describe('Create Car', () => {
       inputAdditionalDriver();
       // ---
 
-      // prepare to capture the POST request after submitting the form
-      cy.intercept({
-        method: 'POST',
-        url: BASE_URL + ':4002/api/create-car',
-      }).as('createCar');
+      // prepare to capture the POST request when submitting the form
+      Api.interceptCreateCar().as('createCar');
 
       // dispatch the POST request
-      CreateCar.submit();
+      backend.CreateCar.submit();
 
       // wait for a response
       cy.wait('@createCar').then(interception => {
@@ -195,7 +187,7 @@ describe('Create Car', () => {
         expect(interception.response.statusCode).to.eq(200);
 
         // default behavior after successful request is to navigate to /cars
-        cy.url().should('eq', BASE_URL + ':3001/cars');
+        cy.url().should('eq', backend.Cars.url);
 
         // assert that the request body is matching the data entry
         const requestBody = interception.request.body;
