@@ -21,6 +21,7 @@ const {
   inputCollisionDamageWaiver,
   inputFullInsurance,
   inputAdditionalDriver,
+  completeForm,
 } = backend.CreateCar;
 
 describe('Create Car', () => {
@@ -149,31 +150,8 @@ describe('Create Car', () => {
 
   describe('Form Submission', () => {
     it('should create a new car', () => {
-      uploadImage();
-      inputName();
-      selectSupplier();
-      inputMinAge();
-      selectPickupLocations();
-      inputPricePerDay();
-      inputDepositAtPickup();
-      toggleAvailableForRental();
-
-      selectEngine();
-      selectGearbox();
-      selectNumSeats();
-      selectNumDoors();
-      selectFuelPolicy();
-      toggleAirCon();
-
-      // optional
-      inputMileage();
-      inputCancellations();
-      inputAmendments();
-      inputTheftProtection();
-      inputCollisionDamageWaiver();
-      inputFullInsurance();
-      inputAdditionalDriver();
-      // ---
+      // complete the form entirely
+      completeForm({ submit: false });
 
       // prepare to capture the POST request when submitting the form
       Api.interceptCreateCar().as('createCar');

@@ -127,6 +127,37 @@ export class CreateCar {
     return el;
   }
 
+  static completeForm({ submit = false, optional = true } = {}) {
+    const CC = CreateCar;
+
+    CC.uploadImage();
+    CC.inputName();
+    CC.selectSupplier();
+    CC.selectPickupLocations();
+    CC.inputPricePerDay();
+    CC.inputDepositAtPickup();
+    CC.toggleAvailableForRental();
+    CC.selectEngine();
+    CC.selectGearbox();
+    CC.selectNumSeats();
+    CC.selectNumDoors();
+    CC.selectFuelPolicy();
+    CC.toggleAirCon();
+    if (optional) {
+      CC.inputMileage();
+      CC.inputCancellations();
+      CC.inputAmendments();
+      CC.inputTheftProtection();
+      CC.inputCollisionDamageWaiver();
+      CC.inputFullInsurance();
+      CC.inputAdditionalDriver();
+    }
+    if (submit) {
+      CC.submit();
+    }
+    return null;
+  }
+
   static get elements() {
     return {
       carName:
