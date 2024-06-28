@@ -12,6 +12,7 @@ export function __env__(key) {
 // resolve keys for the active environment specified in cypress.env.json
 const frontend = __env__('frontend');
 const backend = __env__('backend');
+const api = __env__('api');
 
 // construct and validate the URL before passing it to consumers
 const frontendUrl = new URL(frontend.url);
@@ -19,6 +20,9 @@ frontendUrl.port = frontend.port;
 
 const backendUrl = new URL(backend.url);
 backendUrl.port = backend.port;
+
+const apiUrl = new URL(api.url);
+apiUrl.port = api.port;
 // ---
 
 /** @type {string} */
@@ -34,3 +38,6 @@ export const BACKEND_URL = backendUrl.href;
 export const BACKEND_EMAIL = backend.email;
 /** @type {string} */
 export const BACKEND_PASSWORD = backend.password;
+
+/** @type {string} */
+export const API_URL = apiUrl.href;
