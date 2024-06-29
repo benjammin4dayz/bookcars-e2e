@@ -149,9 +149,18 @@ describe('Create Car', () => {
   });
 
   describe('Form Submission', () => {
+    let formData;
+
+    before(() => {
+      cy.fixture('create-car-request-body.json').then(fixture => {
+        expect(fixture).to.be.an('object').that.is.not.empty;
+        formData = fixture;
+      });
+    });
+
     it('should create a new car', () => {
       // complete the form entirely
-      completeForm({ submit: false });
+      completeForm(formData, { submit: false });
 
       // prepare to capture the POST request when submitting the form
       Api.interceptCreateCar().as('createCar');
@@ -169,22 +178,21 @@ describe('Create Car', () => {
 
         // assert that the request body is matching the data entry
         const requestBody = interception.request.body;
-        cy.fixture('create-car-request-body.json').then(expectedBody => {
-          Object.entries(expectedBody).forEach(([key, value]) => {
-            // Some values are unique with unpredictable UUIDs postfixed to them.
-            // In the mock, set these values equal to type `null` and as a result,
-            // that null value will be set here to mirror the request value.
-            //
-            //! USE THIS SPARINGLY because it will force test assertions to pass.
-            if (value === null) {
-              cy.log(
-                `[WARNING] Detected NULL in mock body. Mirroring value for '${key}' with the request body.`
-              );
-              expectedBody[key] = requestBody[key];
-            }
-          });
-          expect(requestBody).to.deep.equal(expectedBody);
+        Object.entries(formData).forEach(([key, value]) => {
+          // Some values are unique with unpredictable UUIDs postfixed to them.
+          // In the mock, set these values equal to type `null` and as a result,
+          // that null value will be set here to mirror the request value.
+          //
+          //! USE THIS SPARINGLY because it will force test assertions to pass.
+          if (value === null) {
+            cy.log(
+              `[WARNING] Detected NULL in mock body. Mirroring value for '${key}' with the request body.`
+            );
+            formData[key] = requestBody[key];
+          }
         });
+
+        expect(requestBody).to.deep.equal(formData);
       });
     });
   });

@@ -127,34 +127,84 @@ export class CreateCar {
     return el;
   }
 
-  static completeForm({ submit = false, optional = true } = {}) {
-    const CC = CreateCar;
+  static completeForm(formData, { submit = false, optional = true } = {}) {
+    const {
+      uploadImage,
+      inputName,
+      selectSupplier,
+      inputMinAge,
+      selectPickupLocations,
+      inputPricePerDay,
+      inputDepositAtPickup,
+      toggleAvailableForRental,
+      selectEngine,
+      selectGearbox,
+      selectNumSeats,
+      selectNumDoors,
+      selectFuelPolicy,
+      toggleAirCon,
+      inputMileage,
+      inputCancellations,
+      inputAmendments,
+      inputTheftProtection,
+      inputCollisionDamageWaiver,
+      inputFullInsurance,
+      inputAdditionalDriver,
+    } = CreateCar;
 
-    CC.uploadImage();
-    CC.inputName();
-    CC.selectSupplier();
-    CC.selectPickupLocations();
-    CC.inputPricePerDay();
-    CC.inputDepositAtPickup();
-    CC.toggleAvailableForRental();
-    CC.selectEngine();
-    CC.selectGearbox();
-    CC.selectNumSeats();
-    CC.selectNumDoors();
-    CC.selectFuelPolicy();
-    CC.toggleAirCon();
+    const {
+      // image,
+      name,
+      // supplier,
+      minimumAge,
+      // locations,
+      price,
+      deposit,
+      available,
+      type,
+      gearbox,
+      aircon,
+      seats,
+      doors,
+      fuelPolicy,
+      mileage,
+      cancellation,
+      amendments,
+      theftProtection,
+      collisionDamageWaiver,
+      fullInsurance,
+      additionalDriver,
+    } = formData;
+
+    uploadImage();
+    inputName(name);
+    selectSupplier();
+    inputMinAge(minimumAge);
+    selectPickupLocations();
+    inputPricePerDay(price);
+    inputDepositAtPickup(deposit);
+    toggleAvailableForRental(available);
+    selectEngine(type);
+    selectGearbox(gearbox);
+    selectNumSeats(seats);
+    selectNumDoors(doors);
+    selectFuelPolicy(fuelPolicy);
+    toggleAirCon(aircon);
+
     if (optional) {
-      CC.inputMileage();
-      CC.inputCancellations();
-      CC.inputAmendments();
-      CC.inputTheftProtection();
-      CC.inputCollisionDamageWaiver();
-      CC.inputFullInsurance();
-      CC.inputAdditionalDriver();
+      inputMileage(mileage);
+      inputCancellations(cancellation);
+      inputAmendments(amendments);
+      inputTheftProtection(theftProtection);
+      inputCollisionDamageWaiver(collisionDamageWaiver);
+      inputFullInsurance(fullInsurance);
+      inputAdditionalDriver(additionalDriver);
     }
+
     if (submit) {
-      CC.submit();
+      CreateCar.submit();
     }
+
     return null;
   }
 
