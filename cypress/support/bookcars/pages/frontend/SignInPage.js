@@ -1,26 +1,24 @@
 import * as env from '../../env.config';
-import { basicLoginFlow, getFrontendURL } from '../../scripts';
+import { PageObjectBase } from '../PageObjectBase';
+import { basicLoginFlow } from '../../scripts';
 
-export class SignIn {
-  static url = getFrontendURL('/sign-in');
-
-  static visit() {
-    return cy.visit(SignIn.url);
+export class SignInPage extends PageObjectBase {
+  constructor(route) {
+    super({ frontend: route });
   }
 
-  static login() {
+  login() {
     basicLoginFlow({
       username: env.FRONTEND_EMAIL,
       password: env.FRONTEND_PASSWORD,
-      url: SignIn.url,
-      usernameSelector: SignIn.elements.emailInput,
-      passwordSelector: SignIn.elements.passwordInput,
-      submitSelector: SignIn.elements.submitButton,
+      url: this.url,
+      usernameSelector: this.selectors.emailInput,
+      passwordSelector: this.selectors.passwordInput,
+      submitSelector: this.selectors.submitButton,
     });
-    return this;
   }
 
-  static get elements() {
+  static get selectors() {
     return {
       emailInput:
         '#root > div.app > div > div.signin > div > form > div:nth-child(2) > div > input',

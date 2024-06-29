@@ -1,13 +1,11 @@
-import { getFrontendURL } from '../../scripts';
+import { PageObjectBase } from '../PageObjectBase';
 
-export class Home {
-  static url = getFrontendURL('/');
-
-  static visit() {
-    return cy.visit(Home.url);
+export class HomePage extends PageObjectBase {
+  constructor(route) {
+    super({ frontend: route });
   }
 
-  static get elements() {
+  static get selectors() {
     return {
       logo: '#root > div.app > div.content > div > div > div.home-logo > span.home-logo-main',
       pickupLocationInput: '',

@@ -1,5 +1,9 @@
-import { backend, Api } from '../support/bookcars';
+import { Api, backend } from '../support/bookcars';
+
+const { Cars, CreateCar } = backend;
+
 const {
+  el,
   uploadImage,
   inputName,
   selectSupplier,
@@ -22,12 +26,12 @@ const {
   inputFullInsurance,
   inputAdditionalDriver,
   completeForm,
-} = backend.CreateCar;
+} = CreateCar;
 
 describe('Create Car', () => {
   beforeEach(() => {
     cy.login('backend');
-    backend.CreateCar.visit();
+    CreateCar.visit();
   });
 
   describe('Form Inputs', () => {
@@ -45,8 +49,8 @@ describe('Create Car', () => {
     });
 
     it('should input a car name', () => {
-      const carName = inputName('Lada');
-      cy.get(carName).should('have.value', 'Lada');
+      inputName('Lada');
+      el.carName.should('have.value', 'Lada');
     });
 
     it('should select a car supplier', () => {
@@ -55,8 +59,8 @@ describe('Create Car', () => {
     });
 
     it('should input a minimum age', () => {
-      const minAge = inputMinAge(21);
-      cy.get(minAge).should('have.value', 21);
+      inputMinAge(21);
+      el.minAge.should('have.value', 21);
     });
 
     it('should select numerous pickup locations', () => {
@@ -65,86 +69,89 @@ describe('Create Car', () => {
     });
 
     it('should set the price per day', () => {
-      const pricePerDay = inputPricePerDay(100);
-      cy.get(pricePerDay).should('have.value', 100);
+      inputPricePerDay(100);
+      el.pricePerDay.should('have.value', 100);
     });
 
     it('should set the deposit at pickup', () => {
-      const deposit = inputDepositAtPickup(100);
-      cy.get(deposit).should('have.value', 100);
+      inputDepositAtPickup(100);
+      el.depositAtPickup.should('have.value', 100);
     });
 
     it('can toggle availability for rental', () => {
-      const available = toggleAvailableForRental();
-      cy.get(available).should('be.checked');
+      toggleAvailableForRental();
+      el.availableForRental.should('be.checked');
     });
 
     it('should choose the engine', () => {
-      const engine = selectEngine('gasoline');
-      cy.get(engine).contains('gasoline', { matchCase: false });
+      selectEngine('gasoline');
+      el.engine.contains('gasoline', { matchCase: false });
     });
 
     it('should choose the gearbox', () => {
-      const gearbox = selectGearbox('automatic');
-      cy.get(gearbox).contains('automatic', { matchCase: false });
+      selectGearbox('automatic');
+      el.gearbox.contains('automatic', { matchCase: false });
     });
 
     it('should choose the seats', () => {
-      const seats = selectNumSeats(4);
-      cy.get(seats).should('have.text', 4);
+      selectNumSeats(4);
+      el.seats.should('have.text', 4);
     });
 
     it('should choose the doors', () => {
-      const doors = selectNumDoors(4);
-      cy.get(doors).should('have.text', 4);
+      selectNumDoors(4);
+      el.doors.should('have.text', 4);
     });
 
     it('should choose the fuel policy', () => {
-      const fuelPolicy = selectFuelPolicy('likeForlike');
-      cy.get(fuelPolicy).contains('like for like', { matchCase: false });
+      // occasional concurrency issues may occur
+      // https://en.wikipedia.org/wiki/Ostrich_algorithm
+      //
+      selectFuelPolicy('likeForlike');
+      el.fuelPolicy.contains('like for like', { matchCase: false });
 
       selectFuelPolicy('freeTank');
-      cy.get(fuelPolicy).contains('free tank', { matchCase: false });
+      el.fuelPolicy.contains('Free Tank', { matchCase: false });
     });
 
     it("can toggle aircon. It's quite hot!", () => {
-      const aircon = toggleAirCon();
-      cy.get(aircon).should('be.checked');
+      toggleAirCon();
+      el.aircon.should('be.checked');
     });
 
     it('can input mileage', () => {
-      const mileage = inputMileage(69420);
-      cy.get(mileage).should('have.value', 69420);
+      inputMileage(69420);
+      el.mileage.should('have.value', 69420);
     });
 
     it('can input cancellation fees', () => {
-      const cancellations = inputCancellations(100);
-      cy.get(cancellations).should('have.value', 100);
+      inputCancellations(100);
+      el.cancellation.should('have.value', 100);
     });
 
     it('can input amendments', () => {
-      const amendments = inputAmendments(25);
-      cy.get(amendments).should('have.value', 25);
+      inputAmendments(25);
+      el.amendments.should('have.value', 25);
     });
 
     it('can input theft protection cost', () => {
-      const theftProtection = inputTheftProtection(69);
-      cy.get(theftProtection).should('have.value', 69);
+      inputTheftProtection(69);
+      el.theftProtection.should('have.value', 69);
     });
 
     it('can input collision damage waiver cost', () => {
-      const collisionDamageWaiver = inputCollisionDamageWaiver(420);
-      cy.get(collisionDamageWaiver).should('have.value', 420);
+      inputCollisionDamageWaiver(420);
+      el.collisionDamageWaiver.should('have.value', 420);
     });
 
     it('can input full insurance cost', () => {
-      const fullInsurance = inputFullInsurance(690);
-      cy.get(fullInsurance).should('have.value', 690);
+      inputFullInsurance(690);
+      el.fullInsurance.should('have.value', 690);
     });
 
     it('can input additional driver cost', () => {
-      const additionalDriver = inputAdditionalDriver(1337);
-      cy.get(additionalDriver).should('have.value', 1337);
+      inputAdditionalDriver(1337);
+      el.additionalDriver.should('have.value', 1337);
     });
   });
 
@@ -166,7 +173,7 @@ describe('Create Car', () => {
       Api.interceptCreateCar().as('createCar');
 
       // dispatch the POST request
-      backend.CreateCar.submit();
+      CreateCar.submit();
 
       // wait for a response
       cy.wait('@createCar').then(interception => {
@@ -174,7 +181,7 @@ describe('Create Car', () => {
         expect(interception.response.statusCode).to.eq(200);
 
         // default behavior after successful request is to navigate to /cars
-        cy.url().should('eq', backend.Cars.url);
+        cy.url().should('eq', Cars.url);
 
         // assert that the request body is matching the data entry
         const requestBody = interception.request.body;
