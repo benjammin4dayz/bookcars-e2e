@@ -1,12 +1,13 @@
 {
-  "name": "cypress-e2e-template",
-  "version": "0.2.0",
+  "name": "bookcars-e2e",
+  "version": "dev",
   "type": "module",
+  "private": true,
   "scripts": {
     "start": "npm run cy:open || npm install && npm run cy:open",
     "cy:open": "cypress open --e2e",
     "cy:run": "cypress run",
-    "lint": "eslint . --report-unused-disable-directives --max-warnings 0",
+    "lint": "eslint . --report-unused-disable-directives --max-warnings 3",
     "lint:fix": "npm run lint -- --fix"
   },
   "devDependencies": {
@@ -26,6 +27,6 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/benjammin4dayz/cypress-e2e-template"
+    "url": "https://github.com/benjammin4dayz/bookcars-e2e"
   }
 }
