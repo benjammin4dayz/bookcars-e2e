@@ -54,8 +54,25 @@ describe('Create Car', () => {
     });
 
     it('should select a car supplier', () => {
-      selectSupplier();
-      // TODO: add an assertion to test the supplier
+      cy.intercept(Api.routes.suppliers).as('getSuppliers');
+      el.supplierName.click();
+
+      cy.wait('@getSuppliers').then(({ response }) => {
+        expect(response.statusCode, 'Unexpected status code').to.eq(200);
+
+        const { resultData } = response.body[0];
+
+        el.supplierName.click();
+        const index = selectSupplier('Alamo', resultData);
+
+        // assert that each supplier has expected props
+        resultData.forEach(entry => {
+          expect(entry).to.have.all.keys(['_id', 'fullName', 'avatar']);
+        });
+
+        // assert that the selected supplier is the one we expect
+        el.supplierName.should('have.value', resultData[index].fullName);
+      });
     });
 
     it('should input a minimum age', () => {
@@ -64,8 +81,47 @@ describe('Create Car', () => {
     });
 
     it('should select numerous pickup locations', () => {
-      selectPickupLocations();
-      // TODO: add an assertion to test the pickup locations
+      cy.intercept(Api.routes.locations).as('getLocations');
+      el.pickupLocation.click();
+
+      cy.wait('@getLocations').then(({ response }) => {
+        expect(response.statusCode, 'Unexpected status code').to.eq(200);
+
+        const { resultData } = response.body[0];
+
+        el.pickupLocation.click();
+
+        // assert that each supplier has expected props
+        resultData.forEach(entry => {
+          expect(entry).to.have.all.keys([
+            '_id',
+            'createdAt',
+            'name',
+            'updatedAt',
+            'value',
+            'values',
+            '__v',
+          ]);
+        });
+
+        const locations = ['Casablanca City', 'Rabat City', 'Tangier City'];
+
+        // assert that each location is the one we expect
+        locations.forEach(loc => {
+          const index = selectPickupLocations(loc, resultData);
+          el.pickupLocation
+            .parent()
+            .children()
+            .contains(resultData[index].name);
+        });
+
+        // assert that multiple locations were added. there are 2 existing elements
+        // that are NOT locations here, so the +2 is to ignore those
+        el.pickupLocation
+          .parent()
+          .children()
+          .should('have.length', locations.length + 2);
+      });
     });
 
     it('should set the price per day', () => {
@@ -159,8 +215,10 @@ describe('Create Car', () => {
     let formData;
 
     before(() => {
-      cy.fixture('create-car-request-body.json').then(fixture => {
-        expect(fixture).to.be.an('object').that.is.not.empty;
+      const file = 'create-car-request-body.json';
+      cy.fixture(file).then(fixture => {
+        expect(fixture, `Cannot find fixture ${file}`).to.be.an('object').that
+          .is.not.empty;
         formData = fixture;
       });
     });

@@ -1,5 +1,5 @@
 import { PageObjectBase } from '../PageObjectBase';
-import { qcType, selectOption } from '../../scripts';
+import { qcType, selectOption, selectEffectfulOption } from '../../scripts';
 
 export class CreateCarPage extends PageObjectBase {
   constructor(route) {
@@ -17,22 +17,26 @@ export class CreateCarPage extends PageObjectBase {
     qcType(this.selectors.carName, carName);
   };
 
-  selectSupplier = (index = 0) => {
-    const input = this.selectors.supplierName;
-    cy.get(input).click();
-    cy.get(`${input}-option-${index}`).click();
+  selectSupplier = (target = 0, dataset) => {
+    return selectEffectfulOption({
+      inputEl: this.selectors.supplierName,
+      matchKey: 'fullName',
+      target,
+      dataset,
+    });
   };
 
   inputMinAge = (minAge = 21) => {
     qcType(this.selectors.minAge, minAge);
   };
 
-  selectPickupLocations = (numLocations = 5) => {
-    const input = this.selectors.pickupLocation;
-    for (let i = 0; i < numLocations; i++) {
-      cy.get(input).click();
-      cy.get(`${input}-option-${i}`).click();
-    }
+  selectPickupLocations = (target = 0, dataset) => {
+    return selectEffectfulOption({
+      inputEl: this.selectors.pickupLocation,
+      matchKey: 'name',
+      target,
+      dataset,
+    });
   };
 
   inputPricePerDay = (pricePerDay = 100) => {
@@ -143,7 +147,9 @@ export class CreateCarPage extends PageObjectBase {
     this.inputName(name);
     this.selectSupplier();
     this.inputMinAge(minimumAge);
-    this.selectPickupLocations();
+    for (let i = 0; i < 5; i++) {
+      this.selectPickupLocations(i);
+    }
     this.inputPricePerDay(price);
     this.inputDepositAtPickup(deposit);
     this.toggleAvailableForRental(available);
