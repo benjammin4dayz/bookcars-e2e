@@ -91,7 +91,7 @@ describe('Create Car', () => {
 
         el.pickupLocation.click();
 
-        // assert that each supplier has expected props
+        // assert that each location has expected props
         resultData.forEach(entry => {
           expect(entry).to.have.all.keys([
             '_id',

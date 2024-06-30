@@ -47,6 +47,10 @@ export function selectEffectfulOption({ inputEl, matchKey, target, dataset }) {
   }
 
   cy.get(inputEl).click();
+  // this works with the assumption that each dropdown item, generated as an effect
+  // of clicking the inputEl, has an id which extends the input's id.
+  // e.g. '#\\:r0\\:' + '-option-0'
+  // note: this does NOT work for attribute selectors e.g. '[id=":r0:"]'
   cy.get(`${inputEl}-option-${index}`).click();
 
   return index;
