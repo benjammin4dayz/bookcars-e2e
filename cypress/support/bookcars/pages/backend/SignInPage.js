@@ -1,8 +1,7 @@
 import * as env from '../../env.config';
-import { PageObjectBase } from '../PageObjectBase';
-import { basicLoginFlow } from '../../scripts';
+import { basicLoginFlow, PageModel } from '../../scripts';
 
-export class SignInPage extends PageObjectBase {
+export class SignInPage extends PageModel {
   constructor(route) {
     super({ backend: route });
   }

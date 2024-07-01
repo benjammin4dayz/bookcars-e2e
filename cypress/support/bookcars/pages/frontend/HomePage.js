@@ -1,6 +1,6 @@
-import { PageObjectBase } from '../PageObjectBase';
+import { PageModel } from '../../scripts';
 
-export class HomePage extends PageObjectBase {
+export class HomePage extends PageModel {
   constructor(route) {
     super({ frontend: route });
   }

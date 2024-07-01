@@ -1,7 +1,11 @@
-import { PageObjectBase } from '../PageObjectBase';
-import { qcType, selectOption, selectEffectfulOption } from '../../scripts';
+import {
+  PageModel,
+  qcType,
+  selectOption,
+  selectEffectfulOption,
+} from '../../scripts';
 
-export class CreateCarPage extends PageObjectBase {
+export class CreateCarPage extends PageModel {
   constructor(route) {
     super({ backend: route });
   }

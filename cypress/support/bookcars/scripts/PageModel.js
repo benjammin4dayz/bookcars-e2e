@@ -1,4 +1,4 @@
-import { getApiURL, getBackendURL, getFrontendURL } from '../scripts';
+import { getApiURL, getBackendURL, getFrontendURL } from './routes';
 
 class NoInstanceError extends Error {
   constructor(className) {
@@ -47,7 +47,7 @@ class CyGetter {
   }
 }
 
-export class PageObjectBase extends CyGetter {
+export class PageModel extends CyGetter {
   /**
    * Superclass to provide common methods and properties between page objects.
    * @param {Object} options - An object containing __one__ of the following properties:
@@ -56,8 +56,7 @@ export class PageObjectBase extends CyGetter {
    *   - frontend (string): The frontend route to visit.
    */
   constructor({ api, backend, frontend }) {
-    if (new.target === PageObjectBase) {
-      // throw new TypeError('Cannot instantiate PageObjectBase directly.');
+    if (new.target === PageModel) {
       throw new NoInstanceError(new.target.name);
     }
 
