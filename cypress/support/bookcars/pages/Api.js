@@ -15,6 +15,14 @@ export class Api {
     });
   }
 
+  static interceptSuppliers() {
+    return cy.intercept(Api.routes.suppliers);
+  }
+
+  static interceptLocations() {
+    return cy.intercept(Api.routes.locations);
+  }
+
   static get routes() {
     const api = route => getApiURL('/api' + route);
     return {

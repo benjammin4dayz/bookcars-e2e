@@ -54,10 +54,10 @@ describe('Create Car', () => {
     });
 
     it('should select a car supplier', () => {
-      cy.intercept(Api.routes.suppliers).as('getSuppliers');
+      Api.interceptSuppliers().as('suppliers');
       el.supplierName.click();
 
-      cy.wait('@getSuppliers').then(({ response }) => {
+      cy.wait('@suppliers').then(({ response }) => {
         expect(response.statusCode, 'Unexpected status code').to.eq(200);
 
         const { resultData } = response.body[0];
@@ -81,10 +81,10 @@ describe('Create Car', () => {
     });
 
     it('should select numerous pickup locations', () => {
-      cy.intercept(Api.routes.locations).as('getLocations');
+      Api.interceptLocations().as('locations');
       el.pickupLocation.click();
 
-      cy.wait('@getLocations').then(({ response }) => {
+      cy.wait('@locations').then(({ response }) => {
         expect(response.statusCode, 'Unexpected status code').to.eq(200);
 
         const { resultData } = response.body[0];
