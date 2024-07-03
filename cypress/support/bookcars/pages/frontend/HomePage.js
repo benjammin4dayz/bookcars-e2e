@@ -1,4 +1,9 @@
-import { PageModel, selectEffectfulOption, generateDates } from '../../scripts';
+import {
+  PageModel,
+  selectEffectfulOption,
+  generateDates,
+  qcType,
+} from '../../scripts';
 
 export class HomePage extends PageModel {
   constructor(route) {
@@ -16,13 +21,13 @@ export class HomePage extends PageModel {
 
   selectPickupDate(daysFromToday = 1, time = '10:00 AM') {
     const { start } = generateDates(daysFromToday, 7, time);
-    this.el.pickupDateInput.click().type(start);
+    qcType(this.selectors.pickupDateInput, start);
     return start;
   }
 
   selectDropoffDate(duration = 7, time = '10:00 AM') {
     const { end } = generateDates(1, duration, time);
-    this.el.dropOffDateInput.click().type(end);
+    qcType(this.selectors.dropOffDateInput, end);
     return end;
   }
 
