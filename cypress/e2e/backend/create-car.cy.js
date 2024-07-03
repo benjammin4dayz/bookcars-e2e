@@ -1,4 +1,4 @@
-import { api, backend } from '../support/bookcars';
+import { api, backend } from '../../support/bookcars';
 
 const { Cars, CreateCar } = backend;
 
