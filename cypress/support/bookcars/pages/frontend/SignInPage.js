@@ -17,7 +17,7 @@ export class SignInPage extends PageModel {
     });
   }
 
-  static get selectors() {
+  get selectors() {
     return {
       emailInput:
         '#root > div.app > div > div.signin > div > form > div:nth-child(2) > div > input',

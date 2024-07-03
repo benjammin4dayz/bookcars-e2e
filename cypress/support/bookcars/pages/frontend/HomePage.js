@@ -5,10 +5,10 @@ export class HomePage extends PageModel {
     super({ frontend: route });
   }
 
-  static get selectors() {
+  get selectors() {
     return {
-      logo: '#root > div.app > div.content > div > div > div.home-logo > span.home-logo-main',
-      pickupLocationInput: '',
+      logo: '.home-cover',
+      pickupLocationInput: '\\:r0\\:',
       dropOffLocationInput: '',
       dateFromInput: '',
       dateFromPicker: '',
