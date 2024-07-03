@@ -1,9 +1,11 @@
+import { AboutPage } from './AboutPage';
 import { HomePage } from './HomePage';
 import { LocationsPage } from './LocationsPage';
 import { SearchPage } from './SearchPage';
 import { SignInPage } from './SignInPage';
 import { SuppliersPage } from './SuppliersPage';
 
+export const About = new AboutPage('/about');
 export const Home = new HomePage('/');
 export const Locations = new LocationsPage('/locations');
 export const Search = new SearchPage('/search');
