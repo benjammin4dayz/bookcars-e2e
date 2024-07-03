@@ -55,3 +55,45 @@ export function selectEffectfulOption({ inputEl, matchKey, target, dataset }) {
 
   return index;
 }
+
+/**
+ * Generates dates for start and end based on the input parameters and returns them in the format MM/DD/YYYY HH:MM (AM|PM).
+ * @param {number} daysFromToday - Number of days from today.
+ * @param {number} daysAfterFirstParam - Number of days after the first parameter.
+ * @param {string} time - Arbitrary time string (e.g., '10:00 AM', '06:00 PM').
+ * @returns {Object} - An object containing the start and end dates in the format MM/DD/YYYY HH:MM (AM|PM).
+ */
+export function generateDates(daysFromToday, daysAfterFirstParam, time) {
+  const currentDate = new Date();
+  const startDate = new Date(currentDate);
+  const endDate = new Date(currentDate);
+
+  startDate.setDate(currentDate.getDate() + daysFromToday);
+  endDate.setDate(currentDate.getDate() + daysFromToday + daysAfterFirstParam);
+
+  const [hours, minutes] = time.split(':').map(item => parseInt(item));
+  startDate.setHours(hours);
+  startDate.setMinutes(minutes);
+  endDate.setHours(hours);
+  endDate.setMinutes(minutes);
+
+  const formatDateTime = date => {
+    const month = (date.getMonth() + 1).toString().padStart(2, '0');
+    const day = date.getDate().toString().padStart(2, '0');
+    const year = date.getFullYear().toString();
+    const hours12 = date.getHours() % 12 || 12;
+    const amPm = date.getHours() < 12 ? 'AM' : 'PM';
+    const formattedTime = `${month}/${day}/${year} ${hours12}:${minutes
+      .toString()
+      .padStart(2, '0')} ${amPm}`;
+    return formattedTime;
+  };
+
+  const startFormattedDate = formatDateTime(startDate);
+  const endFormattedDate = formatDateTime(endDate);
+
+  return {
+    start: startFormattedDate,
+    end: endFormattedDate,
+  };
+}
