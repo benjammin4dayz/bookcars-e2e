@@ -42,8 +42,21 @@ export class HomePage extends PageModel {
       slickSlider: '.slick-slider',
       mapHeader: 'h1.title',
       map: 'div.home-map > div.map ',
-      footer: 'div.footer',
-      footerHeader: 'div.footer > div.header',
+      footer: '.footer',
+      footerHeader: '.footer > .header',
+      footerCorporate: ':nth-child(1) > .title',
+      footerAboutUs: ':nth-child(1) > .links > :nth-child(1)',
+      footerTermsOfService: ':nth-child(1) > .links > :nth-child(2)',
+      footerRentACar: ':nth-child(2) > .title',
+      footerSuppliers: ':nth-child(2) > .links > :nth-child(1)',
+      footerLocations: ':nth-child(2) > .links > :nth-child(2)',
+      footerSupport: '.main > :nth-child(3) > .title',
+      footerContact: ':nth-child(3) > .links > li',
+      footerEmail: '.contact > a',
+      footerPayment: '.payment',
+      footerPaymentText: '.payment-text',
+      footerPaymentImage: '.payment > img',
+      footerCopyright: 'section.copyright',
     };
   }
 }
