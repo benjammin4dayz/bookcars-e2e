@@ -35,12 +35,23 @@ export class CreateCarPage extends PageModel {
   };
 
   selectPickupLocations = (target = 0, dataset) => {
-    return selectEffectfulOption({
+    const opts = {
       inputEl: this.selectors.pickupLocation,
       matchKey: 'name',
       target,
       dataset,
-    });
+    };
+
+    const indices = [];
+
+    if (Array.isArray(target)) {
+      for (let i = 0; i < target.length; i++) {
+        const index = selectEffectfulOption({ ...opts, target: target[i] });
+        indices.push(index);
+      }
+    }
+
+    return indices.length ? indices : selectEffectfulOption(opts);
   };
 
   inputPricePerDay = (pricePerDay = 100) => {

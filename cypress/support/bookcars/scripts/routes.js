@@ -7,4 +7,4 @@ export const getFrontendURL = route => new URL(route, FRONTEND_URL).href;
 export const getBackendURL = route => new URL(route, BACKEND_URL).href;
 
 /** @param {string} route */
-export const getApiURL = route => new URL(route, API_URL).href;
+export const getApiURL = route => new URL('/api' + route, API_URL).href;

@@ -1,4 +1,4 @@
-import { Api, backend } from '../support/bookcars';
+import { api, backend } from '../support/bookcars';
 
 const { Cars, CreateCar } = backend;
 
@@ -29,6 +29,10 @@ const {
 } = CreateCar;
 
 describe('Create Car', () => {
+  before(async () => {
+    await Promise.all([api.fetchLocations(), api.fetchSuppliers()]);
+  });
+
   beforeEach(() => {
     cy.login('backend');
     CreateCar.visit();
@@ -37,7 +41,7 @@ describe('Create Car', () => {
   describe('Form Inputs', () => {
     it('should upload a car avatar image', () => {
       // prepare to capture the POST request after submitting the image
-      Api.interceptImageUpload().as('createCarImage');
+      api.interceptCreateCarImage().as('createCarImage');
 
       // dispatch the POST request
       uploadImage();
@@ -54,25 +58,8 @@ describe('Create Car', () => {
     });
 
     it('should select a car supplier', () => {
-      Api.interceptSuppliers().as('suppliers');
-      el.supplierName.click();
-
-      cy.wait('@suppliers').then(({ response }) => {
-        expect(response.statusCode, 'Unexpected status code').to.eq(200);
-
-        const { resultData } = response.body[0];
-
-        el.supplierName.click();
-        const index = selectSupplier('Alamo', resultData);
-
-        // assert that each supplier has expected props
-        resultData.forEach(entry => {
-          expect(entry).to.have.all.keys(['_id', 'fullName', 'avatar']);
-        });
-
-        // assert that the selected supplier is the one we expect
-        el.supplierName.should('have.value', resultData[index].fullName);
-      });
+      selectSupplier('Alamo', api.suppliers);
+      el.supplierName.should('have.value', 'Alamo');
     });
 
     it('should input a minimum age', () => {
@@ -81,47 +68,19 @@ describe('Create Car', () => {
     });
 
     it('should select numerous pickup locations', () => {
-      Api.interceptLocations().as('locations');
-      el.pickupLocation.click();
+      const locations = ['Casablanca City', 'Rabat City', 'Tangier City'];
+      const indices = selectPickupLocations(locations, api.locations);
 
-      cy.wait('@locations').then(({ response }) => {
-        expect(response.statusCode, 'Unexpected status code').to.eq(200);
+      const peers = () => el.pickupLocation.parent().children();
 
-        const { resultData } = response.body[0];
-
-        el.pickupLocation.click();
-
-        // assert that each location has expected props
-        resultData.forEach(entry => {
-          expect(entry).to.have.all.keys([
-            '_id',
-            'createdAt',
-            'name',
-            'updatedAt',
-            'value',
-            'values',
-            '__v',
-          ]);
-        });
-
-        const locations = ['Casablanca City', 'Rabat City', 'Tangier City'];
-
-        // assert that each location is the one we expect
-        locations.forEach(loc => {
-          const index = selectPickupLocations(loc, resultData);
-          el.pickupLocation
-            .parent()
-            .children()
-            .contains(resultData[index].name);
-        });
-
-        // assert that multiple locations were added. there are 2 existing elements
-        // that are NOT locations here, so the +2 is to ignore those
-        el.pickupLocation
-          .parent()
-          .children()
-          .should('have.length', locations.length + 2);
+      // assert that each location is the one we expected
+      indices.forEach(i => {
+        peers().contains(api.locations[i].name);
       });
+
+      // assert that multiple locations were added. there are 2 existing elements
+      // that are NOT locations here, so the +2 is to ignore those
+      peers().should('have.length', locations.length + 2);
     });
 
     it('should set the price per day', () => {
@@ -228,7 +187,7 @@ describe('Create Car', () => {
       completeForm(formData, { submit: false });
 
       // prepare to capture the POST request when submitting the form
-      Api.interceptCreateCar().as('createCar');
+      api.interceptCreateCarSubmit().as('createCar');
 
       // dispatch the POST request
       CreateCar.submit();

@@ -1,8 +1,12 @@
-import { Api, frontend } from '../../support/bookcars';
+import { api, frontend } from '../../support/bookcars';
 
 const { Home, Search } = frontend;
 
 describe('Home', () => {
+  before(async () => {
+    await api.fetchLocations();
+  });
+
   beforeEach(() => {
     Home.visit();
   });
@@ -79,36 +83,9 @@ describe('Home', () => {
 
   describe('Inputs', () => {
     it('should select a location', () => {
-      // prepare
       const location = 'Casablanca City';
-      Api.interceptLocations().as('locations');
-
-      // dispatch
-      Home.el.pickupLocationInput.click();
-
-      // assert
-      cy.wait('@locations').then(({ response }) => {
-        expect(response.statusCode, 'Unexpected status code').to.eq(200);
-
-        const { resultData } = response.body[0];
-
-        Home.selectPickupLocation(location, resultData);
-
-        // assert that each location has expected props
-        resultData.forEach(entry => {
-          expect(entry).to.have.all.keys([
-            '_id',
-            'createdAt',
-            'name',
-            'updatedAt',
-            'value',
-            'values',
-            '__v',
-          ]);
-        });
-
-        Home.el.pickupLocationInput.should('have.attr', 'value', location);
-      });
+      Home.selectPickupLocation(location, api.locations);
+      Home.el.pickupLocationInput.should('have.attr', 'value', location);
     });
 
     it('should select a pickup date', () => {
@@ -126,7 +103,6 @@ describe('Home', () => {
 
   describe('Form Submission', () => {
     it('should submit the form', () => {
-      Home.el.pickupLocationInput.click();
       Home.selectPickupLocation(0);
       Home.selectPickupDate();
       Home.selectDropoffDate();

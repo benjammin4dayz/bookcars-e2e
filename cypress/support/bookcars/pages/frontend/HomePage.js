@@ -6,7 +6,6 @@ export class HomePage extends PageModel {
   }
 
   selectPickupLocation(target = 0, dataset) {
-    this.el.pickupLocationInput.click();
     selectEffectfulOption({
       inputEl: this.selectors.pickupLocationInput,
       matchKey: 'name',

@@ -29,6 +29,12 @@
   "ignorePatterns": ["**/*.ts", "cypress.config*", "**/node_modules/**"],
   "rules": {
     "n/no-missing-import": "off",
+    "n/no-unsupported-features/node-builtins": [
+      "error",
+      {
+        "ignores": ["fetch"]
+      }
+    ],
     "import/no-unresolved": "error",
     "mocha/no-mocha-arrows": "off"
   }
