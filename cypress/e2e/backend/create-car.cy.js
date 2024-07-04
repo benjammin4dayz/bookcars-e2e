@@ -197,9 +197,6 @@ describe('Create Car', () => {
         // assert that the response status is OK
         expect(interception.response.statusCode).to.eq(200);
 
-        // default behavior after successful request is to navigate to /cars
-        cy.url().should('eq', Cars.url);
-
         // assert that the request body is matching the data entry
         const requestBody = interception.request.body;
         Object.entries(formData).forEach(([key, value]) => {
@@ -217,6 +214,22 @@ describe('Create Car', () => {
         });
 
         expect(requestBody).to.deep.equal(formData);
+
+        // default behavior after successful request is to navigate to /cars
+        cy.url().should('eq', Cars.url);
+
+        // check that the expected image was created on the /cars page
+        // and is displayed as the first result in the list
+        Cars.el.carList.should('exist').and('be.visible');
+        Cars.el.carList
+          .children()
+          .eq(0)
+          .find('img')
+          .eq(0)
+          .should('exist')
+          .and('be.visible')
+          .and('have.attr', 'src')
+          .and('include', interception.response.body.image);
       });
     });
   });
