@@ -1,0 +1,76 @@
+name: End-to-End
+
+on:
+  workflow_dispatch:
+    inputs:
+      test_api:
+        description: 'Test API'
+        type: boolean
+        default: true
+      test_backend:
+        description: 'Test Backend'
+        type: boolean
+        default: true
+      test_frontend:
+        description: 'Test Frontend'
+        type: boolean
+        default: true
+
+jobs:
+  test:
+    name: Testing 🧪
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: lts/iron
+          cache: 'npm'
+
+      - name: Install dependencies
+        if: steps.cache.outputs.cache-hit != 'true'
+        run: npm ci
+
+      - name: Create Cypress Environment
+        run: |
+          env_content='
+          {
+            "__active_env": "github",
+            "github": {
+              "frontend": {
+                "url": "${{ secrets.FRONTEND_URL }}",
+                "port": "${{ secrets.FRONTEND_PORT }}",
+                "email": "${{ secrets.FRONTEND_EMAIL }}",
+                "password": "${{ secrets.FRONTEND_PASSWORD }}"
+              },
+              "backend": {
+                "url": "${{ secrets.BACKEND_URL }}",
+                "port": "${{ secrets.BACKEND_PORT }}",
+                "email": "${{ secrets.BACKEND_EMAIL }}",
+                "password": "${{ secrets.BACKEND_PASSWORD }}"
+              },
+              "api": {
+                "url": "${{ secrets.API_URL }}",
+                "port": "${{ secrets.API_PORT }}"
+              }
+            }
+          }
+          '
+
+          echo "${env_content}" > cypress.env.json
+
+      - name: Test API
+        if: ${{ github.event.inputs.test_api == 'true' }}
+        run: npm run cy:run:api
+
+      - name: Test Backend
+        if: ${{ github.event.inputs.test_backend == 'true' }}
+        run: npm run cy:run:backend
+
+      - name: Test Frontend
+        if: ${{ github.event.inputs.test_frontend == 'true' }}
+        run: npm run cy:run:frontend
