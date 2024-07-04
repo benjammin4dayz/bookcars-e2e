@@ -10,6 +10,7 @@ export class CarsPage extends PageModel {
   get selectors() {
     return {
       carList: '.car-list',
+      carListItems: '.car-list > :nth-child(n)',
       supplierFilter: '.supplier-filter > .accordion',
       carSpecsFilter: '.car-specs-filter > .accordion',
       carTypeFilter: '.car-type-filter > .accordion',

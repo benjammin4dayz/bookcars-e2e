@@ -193,43 +193,31 @@ describe('Create Car', () => {
       CreateCar.submit();
 
       // wait for a response
-      cy.wait('@createCar').then(interception => {
-        // assert that the response status is OK
-        expect(interception.response.statusCode).to.eq(200);
+      cy.wait('@createCar').then(({ request, response }) => {
+        // assert that the response was successful
+        expect(response.statusCode).to.eq(200);
 
         // assert that the request body is matching the data entry
-        const requestBody = interception.request.body;
-        Object.entries(formData).forEach(([key, value]) => {
-          // Some values are unique with unpredictable UUIDs postfixed to them.
-          // In the mock, set these values equal to type `null` and as a result,
-          // that null value will be set here to mirror the request value.
-          //
-          //! USE THIS SPARINGLY because it will force test assertions to pass.
-          if (value === null) {
-            cy.log(
-              `[WARNING] Detected NULL in mock body. Mirroring value for '${key}' with the request body.`
-            );
-            formData[key] = requestBody[key];
-          }
+        expect(request.body).to.deep.equal({
+          ...formData,
+          image: request.body.image, // mirror temp url
         });
 
-        expect(requestBody).to.deep.equal(formData);
-
-        // default behavior after successful request is to navigate to /cars
+        // assert that the page navigated to /cars
         cy.url().should('eq', Cars.url);
 
-        // check that the expected image was created on the /cars page
-        // and is displayed as the first result in the list
+        // assert that the car list is displayed
         Cars.el.carList.should('exist').and('be.visible');
-        Cars.el.carList
-          .children()
+
+        // assert that the first list item avatar image matches the created car
+        Cars.el.carListItems
           .eq(0)
           .find('img')
           .eq(0)
           .should('exist')
           .and('be.visible')
           .and('have.attr', 'src')
-          .and('include', interception.response.body.image);
+          .and('include', response.body.image);
       });
     });
   });
