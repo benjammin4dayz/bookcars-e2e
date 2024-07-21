@@ -16,3 +16,4 @@
 // Import using ES2015 syntax:
 import './beforeAll';
 import './commands';
+import 'cypress-mochawesome-reporter/register';
