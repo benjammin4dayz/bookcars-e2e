@@ -218,6 +218,23 @@ describe('Create Car', () => {
           .and('be.visible')
           .and('have.attr', 'src')
           .and('include', response.body.image);
+
+        // compare the uploaded image data to the source
+        Cars.el.carListItems
+          .eq(0)
+          .find('img')
+          .eq(0)
+          .then(img => {
+            cy.fixture('create-car-avatar.png', 'base64').then(fixtureData => {
+              cy.request({
+                url: img.attr('src'),
+                encoding: 'base64',
+              }).then(res => {
+                expect(res.status).to.eq(200);
+                expect(res.body).to.equal(fixtureData);
+              });
+            });
+          });
       });
     });
   });
