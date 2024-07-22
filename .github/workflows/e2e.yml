@@ -2,38 +2,20 @@ name: End-to-End
 
 on:
   workflow_dispatch:
-    inputs:
-      test_api:
-        description: 'Test API'
-        type: boolean
-        default: true
-      test_backend:
-        description: 'Test Backend'
-        type: boolean
-        default: true
-      test_frontend:
-        description: 'Test Frontend'
-        type: boolean
-        default: true
+  schedule:
+    # https://crontab.guru
+    - cron: '0 12 * * 1' # every Monday at 12:00
 
 jobs:
   test:
     name: Testing 🧪
     runs-on: ubuntu-latest
-
+    permissions:
+      contents: read
+      deployments: write
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: lts/iron
-          cache: 'npm'
-
-      - name: Install dependencies
-        if: steps.cache.outputs.cache-hit != 'true'
-        run: npm ci
 
       - name: Create Cypress Environment
         run: |
@@ -63,14 +45,18 @@ jobs:
 
           echo "${env_content}" > cypress.env.json
 
-      - name: Test API
-        if: ${{ github.event.inputs.test_api == 'true' }}
-        run: npm run cy:run:api
+      - name: Cypress run
+        uses: cypress-io/github-action@v6
+        with:
+          browser: chrome
+          headed: true
+          spec: cypress/e2e
 
-      - name: Test Backend
-        if: ${{ github.event.inputs.test_backend == 'true' }}
-        run: npm run cy:run:backend
-
-      - name: Test Frontend
-        if: ${{ github.event.inputs.test_frontend == 'true' }}
-        run: npm run cy:run:frontend
+      - name: Publish
+        uses: cloudflare/pages-action@v1
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          projectName: jam-bc-e2e
+          directory: cypress/reports/html
+          gitHubToken: ${{ secrets.GITHUB_TOKEN }}
